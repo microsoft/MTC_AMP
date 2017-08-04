@@ -43,7 +43,6 @@ namespace AMP.Views.Triggers
 
         private async void Model_StateChanged(object model, VisualStateEventArgs args)
         {
-            var me = model as VisualStateTrigger;
             var isActive = args.NewState.ToString().Equals(TargetState);
             Debug.WriteLine($"VisualStateTrigger {_guid}: target = {TargetState} new: {args.NewState.ToString()} result={isActive}");
             await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
