@@ -1,17 +1,14 @@
-﻿// ****************************************************************************
-// <copyright file="NavigationService.cs" company="GalaSoft Laurent Bugnion">
-// Copyright © GalaSoft Laurent Bugnion 2009-2016
-// </copyright>
-// ****************************************************************************
-// <author>Laurent Bugnion</author>
-// <email>laurent@galasoft.ch</email>
-// <date>02.10.2014</date>
-// <project>GalaSoft.MvvmLight</project>
-// <web>http://www.mvvmlight.net</web>
-// <license>
-// See license.txt in this solution or http://www.galasoft.ch/license_MIT.txt
-// </license>
-// ****************************************************************************
+﻿////*********************************************************
+//
+// Copyright (c) Microsoft. All rights reserved.
+// This code is licensed under the MIT License (MIT).
+// THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
+// ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
+// IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
+// PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
+//
+//*********************************************************
+
 
 using GalaSoft.MvvmLight.Views;
 using System;

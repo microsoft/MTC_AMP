@@ -120,6 +120,7 @@
     <Compile Include="Views\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\InverseBoolToVisibilityConverter.cs" />
     <Compile Include="Views\NavAwarePage.cs" />
+    <Compile Include="Views\StateHelper.cs" />
     <Compile Include="Views\Triggers\VisualStateTrigger.cs" />
     <EmbeddedResource Include="Properties\AMP.rd.xml" />
   </ItemGroup>
