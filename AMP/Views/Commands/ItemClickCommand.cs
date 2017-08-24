@@ -8,6 +8,10 @@
 // PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 //
 //*********************************************************
+//
+// See https://marcominerva.wordpress.com/2013/03/07/how-to-bind-the-itemclick-event-to-a-command-and-pass-the-clicked-item-to-it/
+// for original implementation.
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,6 +50,23 @@ namespace AMP.Views.Commands
         }
 
 
+
+      
+        // Using a DependencyProperty as the backing store for CommandParameter.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CommandParameterProperty =
+            DependencyProperty.Register("CommandParameter", typeof(object), typeof(ItemClickCommand), new PropertyMetadata(null));
+
+        public static void SetCommandParameter(DependencyObject d, ICommand value)
+        {
+            d.SetValue(CommandParameterProperty, value);
+        }
+
+        public static ICommand GetCommandParameter(DependencyObject d)
+        {
+            return (ICommand)d.GetValue(CommandParameterProperty);
+        }
+
+
         // Using a DependencyProperty as the backing store for CommandParameter.  This enables animation, styling, binding, etc...
 
         private static void OnItemClick(object sender, ItemClickEventArgs e)
@@ -53,13 +74,17 @@ namespace AMP.Views.Commands
             Type castType;
             var control = sender as ListViewBase;
             var command = GetCommand(control);
+            var param = GetCommandParameter(control);
 
             var generics = command.GetType().GetGenericArguments();
             if (generics.Length > 0)
                 castType = generics[0];
 
-            if (command != null && command.CanExecute(e.ClickedItem))
-                command.Execute(e.ClickedItem);
+            if (command != null)
+                if (param == null && command.CanExecute(e.ClickedItem))
+                    command.Execute(e.ClickedItem);
+                else if (param != null && command.CanExecute(param))
+                        command.Execute(param);
         }
     }
 
