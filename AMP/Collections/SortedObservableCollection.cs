@@ -19,6 +19,7 @@ namespace AMP.Collections
 
         private SortDirection _sortDirection;
         private Func<T, DateTimeOffset> _funcDate;
+        private Func<T, TimeSpan> _funcTime;
         private Func<T, bool> _funcBool;
 
         public void Sort(Func<T, string> keySelector, SortDirection direction = SortDirection.Ascending)
@@ -65,6 +66,26 @@ namespace AMP.Collections
         {
 
             _funcDate = keySelector;
+            _sortDirection = direction;
+            switch (direction)
+            {
+                case SortDirection.Ascending:
+                    {
+                        ApplySort(Items.OrderBy(keySelector));
+                        break;
+                    }
+                case SortDirection.Descending:
+                    {
+                        ApplySort(Items.OrderByDescending(keySelector));
+                        break;
+                    }
+            }
+        }
+
+        public void Sort(Func<T, TimeSpan> keySelector, SortDirection direction = SortDirection.Ascending)
+        {
+
+            _funcTime = keySelector;
             _sortDirection = direction;
             switch (direction)
             {
@@ -136,6 +157,12 @@ namespace AMP.Collections
                 Sort(_funcBool, _sortDirection);
                 return;
             }
+            if (_funcTime != null)
+            {
+                Sort(_funcTime, _sortDirection);
+                return;
+            }
+            
         }
 
         protected override void SetItem(int index, T item)
