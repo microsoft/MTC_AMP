@@ -35,7 +35,7 @@ namespace AMP.Views.Triggers
 
         // Using a DependencyProperty as the backing store for ViewModel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(IVisualState), typeof(VisualStateTrigger), new PropertyMetadata(null, OnViewModelChanged));
+            DependencyProperty.Register("ViewModel", typeof(IVisualState), typeof(VisualStateTrigger), new PropertyMetadata(default(object), OnViewModelChanged));
 
         private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

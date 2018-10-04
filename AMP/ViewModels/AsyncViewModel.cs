@@ -29,7 +29,6 @@ namespace AMP.ViewModels
 
         protected AsyncViewModel() :base()
         {
-            Debug.WriteLine("AsyncViewModel ctor");
             
             if (_dispatcher == null)
                 _dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;

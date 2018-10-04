@@ -33,7 +33,6 @@ namespace AMP.ViewModels
 
     public interface IVisualState  
     {
-        string CurrentVisualState { get; }
         event EventHandler<VisualStateEventArgs> VisualStateChanged;
     }
 }

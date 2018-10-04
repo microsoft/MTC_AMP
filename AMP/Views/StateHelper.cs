@@ -21,6 +21,11 @@ namespace AMP.Views
     
     public class StateHelper : DependencyObject
     {
+        public StateHelper()
+        {
+
+        }
+
         public static readonly DependencyProperty StateProperty = DependencyProperty.RegisterAttached(
             "State", typeof(String), typeof(StateHelper), new PropertyMetadata("Normal", StateChanged));
 
