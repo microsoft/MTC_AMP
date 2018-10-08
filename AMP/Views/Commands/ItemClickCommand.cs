@@ -56,14 +56,14 @@ namespace AMP.Views.Commands
         public static readonly DependencyProperty CommandParameterProperty =
             DependencyProperty.Register("CommandParameter", typeof(object), typeof(ItemClickCommand), new PropertyMetadata(null));
 
-        public static void SetCommandParameter(DependencyObject d, ICommand value)
+        public static void SetCommandParameter(DependencyObject d, object value)
         {
             d.SetValue(CommandParameterProperty, value);
         }
 
-        public static ICommand GetCommandParameter(DependencyObject d)
+        public static object GetCommandParameter(DependencyObject d)
         {
-            return (ICommand)d.GetValue(CommandParameterProperty);
+            return d.GetValue(CommandParameterProperty);
         }
 
 
