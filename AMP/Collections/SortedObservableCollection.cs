@@ -165,6 +165,11 @@ namespace AMP.Collections
             
         }
 
+        protected override void RemoveItem(int index)
+        {
+            base.RemoveItem(index);
+        }
+
         protected override void SetItem(int index, T item)
         {
             this.InsertItem(index, item);

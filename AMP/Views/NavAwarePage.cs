@@ -13,6 +13,7 @@ using AMP.Services;
 using System.Diagnostics;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml;
 
 namespace AMP.Views
 {
@@ -33,16 +34,30 @@ namespace AMP.Views
         {
             base.OnNavigatedTo(e);
 
-            var navigableViewModel = this.DataContext as INavAware;
-            if (navigableViewModel != null)
-                navigableViewModel.Activate(e.Parameter);
+            await InitializeViewModels(this, e.Parameter);
 
-            var asyncViewModel = this.DataContext as IAsyncInitialization;
+            if (this.Content is Panel)
+            {
+                var panel = this.Content as Panel;
+                foreach (var child in panel.Children)
+                {
+                    if (child is FrameworkElement)
+                        await InitializeViewModels(child as FrameworkElement, e.Parameter);
+                }
+            }
+        }
+
+        private async System.Threading.Tasks.Task InitializeViewModels(FrameworkElement element, object parameter)
+        {
+            var navigableViewModel = element.DataContext as INavAware;
+            if (navigableViewModel != null)
+                navigableViewModel.Activate(parameter);
+
+            var asyncViewModel = element.DataContext as IAsyncInitialization;
             if (asyncViewModel != null)
                 await asyncViewModel.Initialization;
         }
 
-        
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
