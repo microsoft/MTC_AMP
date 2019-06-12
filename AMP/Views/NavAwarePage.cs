@@ -14,6 +14,8 @@ using System.Diagnostics;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
+using System.Threading.Tasks;
 
 namespace AMP.Views
 {
@@ -36,15 +38,45 @@ namespace AMP.Views
 
             await InitializeViewModels(this, e.Parameter);
 
-            if (this.Content is Panel)
+            if (this.Content is Panel root)
             {
-                var panel = this.Content as Panel;
-                foreach (var child in panel.Children)
+                await InitializeChildrenAsync(root, e.Parameter);
+            }
+        }
+
+        private async Task InitializeChildrenAsync(FrameworkElement uiElement, object state)
+        {
+            //foreach (var child in root.Children)
+            //{
+            //    if (child is FrameworkElement element)
+            //    {
+            //        await InitializeViewModels(element, e.Parameter);
+
+            //    }
+
+
+            //}
+            if (uiElement == null)
+                return;
+
+           await InitializeViewModels(uiElement, state);
+           if (uiElement is Panel panel)
+            {
+                foreach (var element in panel.Children)
                 {
-                    if (child is FrameworkElement)
-                        await InitializeViewModels(child as FrameworkElement, e.Parameter);
+                    await InitializeChildrenAsync(element as FrameworkElement, state);
                 }
             }
+            else if (uiElement is UserControl userControl)
+            {
+                await InitializeChildrenAsync(userControl.Content as FrameworkElement, state);
+            }
+            else if (uiElement is ContentControl contentControl)
+            {
+                var uiElementAsContentControl = (ContentControl)uiElement;
+                await InitializeChildrenAsync(contentControl.Content as FrameworkElement, state);
+            }
+      
         }
 
         private async System.Threading.Tasks.Task InitializeViewModels(FrameworkElement element, object parameter)
