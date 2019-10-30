@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AMP.Collections
@@ -128,6 +129,7 @@ namespace AMP.Collections
         {
             var sortedItemsList = sortedItems.ToList();
 
+            Debug.WriteLine($"Applying Sort: {sortedItemsList.Count}");
             foreach (var item in sortedItemsList)
             {
                 Move(IndexOf(item), sortedItemsList.IndexOf(item));

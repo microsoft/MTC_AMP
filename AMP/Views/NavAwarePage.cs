@@ -40,41 +40,33 @@ namespace AMP.Views
 
             if (this.Content is Panel root)
             {
-                await InitializeChildrenAsync(root, e.Parameter);
+                await InitializeChildrenAsync(root, e.Parameter, this.DataContext);
             }
         }
 
-        private async Task InitializeChildrenAsync(FrameworkElement uiElement, object state)
+        private async Task InitializeChildrenAsync(FrameworkElement uiElement, object state, object parentDataContext = null)
         {
-            //foreach (var child in root.Children)
-            //{
-            //    if (child is FrameworkElement element)
-            //    {
-            //        await InitializeViewModels(element, e.Parameter);
-
-            //    }
-
-
-            //}
-            if (uiElement == null)
+           if (uiElement == null)
                 return;
 
-           await InitializeViewModels(uiElement, state);
+           if (!uiElement.DataContext.Equals(parentDataContext))
+            await InitializeViewModels(uiElement, state);
+           
            if (uiElement is Panel panel)
             {
                 foreach (var element in panel.Children)
                 {
-                    await InitializeChildrenAsync(element as FrameworkElement, state);
+                    await InitializeChildrenAsync(element as FrameworkElement, state, uiElement.DataContext);
                 }
             }
             else if (uiElement is UserControl userControl)
             {
-                await InitializeChildrenAsync(userControl.Content as FrameworkElement, state);
+                await InitializeChildrenAsync(userControl.Content as FrameworkElement, state, uiElement.DataContext);
             }
             else if (uiElement is ContentControl contentControl)
             {
                 var uiElementAsContentControl = (ContentControl)uiElement;
-                await InitializeChildrenAsync(contentControl.Content as FrameworkElement, state);
+                await InitializeChildrenAsync(contentControl.Content as FrameworkElement, state, uiElement.DataContext);
             }
       
         }
