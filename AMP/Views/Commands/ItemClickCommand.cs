@@ -81,7 +81,7 @@ namespace AMP.Views.Commands
                 castType = generics[0];
 
             if (command != null)
-                if (param == null && command.CanExecute(e.ClickedItem))
+                if (param is null && command.CanExecute(e.ClickedItem))
                     command.Execute(e.ClickedItem);
                 else if (param != null && command.CanExecute(param))
                         command.Execute(param);

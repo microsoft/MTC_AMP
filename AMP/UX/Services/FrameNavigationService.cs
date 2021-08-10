@@ -60,7 +60,7 @@ namespace AMP.UX.Services
                         return RootPageKey;
                     }
 
-                    if (frame.Content == null)
+                    if (frame.Content is null)
                     {
                         return UnknownPageKey;
                     }
@@ -170,7 +170,7 @@ namespace AMP.UX.Services
                         string.Format(
                             "No such page: {0}. Did you forget to call NavigationService.Configure?",
                             pageKey),
-                        "pageKey");
+                        nameof(pageKey));
                 }
                 var frame = GetTargetFrame(_pagesByKey[pageKey].Target);
                 

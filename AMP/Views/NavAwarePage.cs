@@ -29,14 +29,13 @@ namespace AMP.Views
 
         private void NavAwarePage_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            Debug.WriteLine("loaded");
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
-            await InitializeViewModels(this, e.Parameter);
+           await InitializeViewModels(this, e.Parameter);
 
             if (this.Content is Panel root)
             {
@@ -46,11 +45,11 @@ namespace AMP.Views
 
         private async Task InitializeChildrenAsync(FrameworkElement uiElement, object state, object parentDataContext = null)
         {
-           if (uiElement == null)
+           if (uiElement is null)
                 return;
 
-           if (!uiElement.DataContext.Equals(parentDataContext))
-            await InitializeViewModels(uiElement, state);
+           if (uiElement.DataContext != null && !uiElement.DataContext.Equals(parentDataContext))
+             await InitializeViewModels(uiElement, state);
            
            if (uiElement is Panel panel)
             {

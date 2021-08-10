@@ -30,7 +30,7 @@ namespace AMP.ViewModels
         protected AsyncViewModel() :base()
         {
             
-            if (_dispatcher == null)
+            if (_dispatcher is null)
                 _dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
         }
 

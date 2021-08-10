@@ -129,7 +129,6 @@ namespace AMP.Collections
         {
             var sortedItemsList = sortedItems.ToList();
 
-            Debug.WriteLine($"Applying Sort: {sortedItemsList.Count}");
             foreach (var item in sortedItemsList)
             {
                 Move(IndexOf(item), sortedItemsList.IndexOf(item));

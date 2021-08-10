@@ -10,6 +10,7 @@
 //*********************************************************
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,15 +35,18 @@ namespace AMP.Views
         {
             try
             {
+                                
                 string newState = (string)args.NewValue;
+              
                 if (args.NewValue != null)
                 {
                     bool res = VisualStateManager.GoToState((Control)target, newState, true);
+                    Debug.WriteLine($"StateChanged: {newState}");
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("StateHelper: " + ex.Message);
+                Debug.WriteLine($"StateHelper Failed on NewState: {args.NewValue} w/ " + ex.Message);
             }
         }
 
