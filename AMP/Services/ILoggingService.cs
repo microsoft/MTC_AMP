@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace AMP.Services
 {
@@ -21,75 +22,72 @@ namespace AMP.Services
 
     public class LocalFileLogger : ILogging
     {
+       
         static bool _isEnabled = true;
-
-        static LocalFileLogger()
-        {
-            var logFilePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "log.txt");
-
-
-            Log.Logger = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day).CreateLogger();
-            //System.Diagnostics.Debug.WriteLine($"{DateTime.Today.ToString("yyyyMMdd")}");
-
-
-        }
-
-
 
         public bool IsEnabled { get { return _isEnabled; } set { _isEnabled = value; } }
 
         public void Information(string message)
         {
             if (IsEnabled)
-                Log.Information(message);
+                LogUtil.Information(message);
         }
         public void Debug(string message)
         {
             if (IsEnabled)
-                Log.Debug(message);
+                LogUtil.Debug(message);
         }
 
         public void Warning(string message)
         {
             if (IsEnabled)
-                Log.Warning(message);
+                LogUtil.Warning(message);
         }
 
         public void Error(string message)
         {
             if (IsEnabled)
-                Log.Error(message);
+                LogUtil.Error(message);
         }
     }
 
     public static class LogUtil
     {
-        private static LocalFileLogger _logger;
+        static string LOG_BASE_NAME = "log";
 
         static LogUtil()
         {
-            _logger = new LocalFileLogger();
+            var logFilePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{LOG_BASE_NAME}.txt");
+            Log.Logger = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day).CreateLogger();
         }
 
         public static void Information(string message)
         {
 
-            _logger.Information(message);
+            Log.Information(message);
         }
 
         public static void Debug(string message)
         {
-            _logger.Debug(message);
+            Log.Debug(message);
 
 
         }
         public static void Warning(string message)
         {
-            _logger.Warning(message);
+            Log.Warning(message);
         }
         public static void Error(string message)
         {
-            _logger.Error(message);
+            Log.Error(message);
+        }
+
+        public static async Task<RandomAccessStreamReference> GetFileStreamReference()
+        {
+            var logFilePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{LOG_BASE_NAME}{DateTime.Today.ToString("yyyyMMdd")}.txt");
+            var logfile = await StorageFile.GetFileFromPathAsync(logFilePath);
+
+            return RandomAccessStreamReference.CreateFromFile((IStorageFile)logfile);
         }
     }
 }
