@@ -18,6 +18,7 @@ namespace AMP.Services
         void Debug(string message);
         void Warning(string message);
         void Error(string message);
+        Task ClearAsync();
     }
 
     public class LocalFileLogger : ILogging
@@ -48,6 +49,11 @@ namespace AMP.Services
         {
             if (IsEnabled)
                 LogUtil.Error(message);
+        }
+
+        public async Task ClearAsync()
+        {
+            await LogUtil.ClearAsync();
         }
     }
 
@@ -88,6 +94,19 @@ namespace AMP.Services
             var logfile = await StorageFile.GetFileFromPathAsync(logFilePath);
 
             return RandomAccessStreamReference.CreateFromFile((IStorageFile)logfile);
+        }
+
+        public static async Task ClearAsync()
+        {
+            var todaysLog = $"{LOG_BASE_NAME}{DateTime.Today.ToString("yyyyMMdd")}.txt";
+
+            var files = await ApplicationData.Current.LocalFolder.GetFilesAsync();
+
+            foreach (var file in files)
+            {
+                if (file.Name != todaysLog)
+                    await file.DeleteAsync();
+            }
         }
     }
 }
