@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,10 +15,14 @@ namespace AMP.Services
     {
 
         bool IsEnabled { get; set; }
-        void Information(string message);
+        bool EmitToConsole { get; set; }
         void Debug(string message);
+        void Information(string message);
+     
         void Warning(string message);
         void Error(string message);
+        void Fatal(string message);
+     
         Task ClearAsync();
     }
 
@@ -25,31 +30,61 @@ namespace AMP.Services
     {
        
         static bool _isEnabled = true;
+        static bool _emitToConsole = false;
 
         public bool IsEnabled { get { return _isEnabled; } set { _isEnabled = value; } }
+        public bool EmitToConsole { get { return _emitToConsole; } set { _emitToConsole = value; } }
+
+        public LocalFileLogger()
+        {
+            
+        }
 
         public void Information(string message)
         {
             if (IsEnabled)
+            {
                 LogUtil.Information(message);
+                if (EmitToConsole)
+                    System.Diagnostics.Debug.WriteLine($"");
+            }
+
+          
         }
         public void Debug(string message)
         {
             if (IsEnabled)
                 LogUtil.Debug(message);
+            if (EmitToConsole)
+                System.Diagnostics.Debug.WriteLine($"");
+
         }
 
         public void Warning(string message)
         {
             if (IsEnabled)
                 LogUtil.Warning(message);
+            if (EmitToConsole)
+                System.Diagnostics.Debug.WriteLine($"");
         }
 
         public void Error(string message)
         {
             if (IsEnabled)
                 LogUtil.Error(message);
+            if (EmitToConsole)
+                System.Diagnostics.Debug.WriteLine($"");
         }
+
+        public void Fatal(string message)
+        {
+            if (IsEnabled)
+                LogUtil.Error(message);
+            if (EmitToConsole)
+                System.Diagnostics.Debug.WriteLine($"");
+        }
+
+     
 
         public async Task ClearAsync()
         {
@@ -64,28 +99,33 @@ namespace AMP.Services
         static LogUtil()
         {
             var logFilePath = Path.Combine(ApplicationData.Current.LocalFolder.Path, $"{LOG_BASE_NAME}.txt");
-            Log.Logger = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day).CreateLogger();
-        }
-
-        public static void Information(string message)
-        {
-
-            Log.Information(message);
+            Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day).CreateLogger();
+           
         }
 
         public static void Debug(string message)
         {
-            Log.Debug(message);
+           Log.Logger.Debug(message);
+        }
+
+        public static void Information(string message)
+        {
+            Log.Logger.Information(message);
 
 
         }
         public static void Warning(string message)
         {
-            Log.Warning(message);
+            Log.Logger.Warning(message);
         }
         public static void Error(string message)
         {
-            Log.Error(message);
+            Log.Logger.Error(message);
+        }
+
+        public static void Fatal(string message)
+        {
+            Log.Logger.Fatal(message);
         }
 
         public static async Task<RandomAccessStreamReference> GetFileStreamReference()
@@ -104,7 +144,7 @@ namespace AMP.Services
 
             foreach (var file in files)
             {
-                if (file.Name != todaysLog)
+                if (file.Name != todaysLog && file.Name.EndsWith(".txt"))
                     await file.DeleteAsync();
             }
         }
