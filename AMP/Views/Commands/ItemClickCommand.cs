@@ -47,11 +47,32 @@ namespace AMP.Views.Commands
             var control = d as ListViewBase;
             if (control != null)
                 control.ItemClick += OnItemClick;
+            else
+            {
+                var click = d as UIElement;
+                if (click != null)
+                    click.Tapped += Click_Tapped;
+            }    
+        }
+
+        private static void Click_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            Type castType;
+            var control = sender as UIElement;
+            var command = GetCommand(control);
+            var param = GetCommandParameter(control);
+
+          
+            if (command != null)
+                if (param is null && command.CanExecute(null))
+                    command.Execute(null);
+                else if (param != null && command.CanExecute(param))
+                    command.Execute(param);
         }
 
 
 
-      
+
         // Using a DependencyProperty as the backing store for CommandParameter.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CommandParameterProperty =
             DependencyProperty.Register("CommandParameter", typeof(object), typeof(ItemClickCommand), new PropertyMetadata(null));
@@ -76,9 +97,9 @@ namespace AMP.Views.Commands
             var command = GetCommand(control);
             var param = GetCommandParameter(control);
 
-            var generics = command.GetType().GetGenericArguments();
-            if (generics.Length > 0)
-                castType = generics[0];
+            //var generics = command.GetType().GetGenericArguments();
+            //if (generics.Length > 0)
+            //    castType = generics[0];
 
             if (command != null)
                 if (param is null && command.CanExecute(e.ClickedItem))
