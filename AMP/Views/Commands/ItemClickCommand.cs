@@ -57,7 +57,6 @@ namespace AMP.Views.Commands
 
         private static void Click_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            Type castType;
             var control = sender as UIElement;
             var command = GetCommand(control);
             var param = GetCommandParameter(control);
@@ -92,14 +91,9 @@ namespace AMP.Views.Commands
 
         private static void OnItemClick(object sender, ItemClickEventArgs e)
         {
-            Type castType;
             var control = sender as ListViewBase;
             var command = GetCommand(control);
             var param = GetCommandParameter(control);
-
-            //var generics = command.GetType().GetGenericArguments();
-            //if (generics.Length > 0)
-            //    castType = generics[0];
 
             if (command != null)
                 if (param is null && command.CanExecute(e.ClickedItem))
